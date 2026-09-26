@@ -278,6 +278,7 @@ one, so it degenerates to the vanishing of the bracket itself. -/
 omit [DecidableEq B] in
 /-- In a Serre system, the higher Serre relation on the raising generators degenerates when the
 Cartan-matrix entry vanishes: `⁅Eᵢ, Eⱼ⁆ = 0` when `CMᵢⱼ = 0`. -/
+@[simp]
 theorem IsSerreSystem.lie_E_E_of_cartan_eq_zero {H E F : B → L}
     (h : IsSerreSystem R CM H E F) (i j : B) (hCM : CM i j = 0) :
     ⁅E i, E j⁆ = 0 := by
@@ -288,6 +289,7 @@ theorem IsSerreSystem.lie_E_E_of_cartan_eq_zero {H E F : B → L}
 omit [DecidableEq B] in
 /-- In a Serre system, the higher Serre relation on the lowering generators degenerates when the
 Cartan-matrix entry vanishes: `⁅Fᵢ, Fⱼ⁆ = 0` when `CMᵢⱼ = 0`. -/
+@[simp]
 theorem IsSerreSystem.lie_F_F_of_cartan_eq_zero {H E F : B → L}
     (h : IsSerreSystem R CM H E F) (i j : B) (hCM : CM i j = 0) :
     ⁅F i, F j⁆ = 0 := by
