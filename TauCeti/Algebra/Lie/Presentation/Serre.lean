@@ -278,7 +278,6 @@ one, so it degenerates to the vanishing of the bracket itself. -/
 omit [DecidableEq B] in
 /-- In a Serre system, the higher Serre relation on the raising generators degenerates when the
 Cartan-matrix entry vanishes: `⁅Eᵢ, Eⱼ⁆ = 0` when `CMᵢⱼ = 0`. -/
-@[simp]
 theorem IsSerreSystem.lie_E_E_of_cartan_eq_zero {H E F : B → L}
     (h : IsSerreSystem R CM H E F) (i j : B) (hCM : CM i j = 0) :
     ⁅E i, E j⁆ = 0 := by
@@ -289,13 +288,30 @@ theorem IsSerreSystem.lie_E_E_of_cartan_eq_zero {H E F : B → L}
 omit [DecidableEq B] in
 /-- In a Serre system, the higher Serre relation on the lowering generators degenerates when the
 Cartan-matrix entry vanishes: `⁅Fᵢ, Fⱼ⁆ = 0` when `CMᵢⱼ = 0`. -/
-@[simp]
 theorem IsSerreSystem.lie_F_F_of_cartan_eq_zero {H E F : B → L}
     (h : IsSerreSystem R CM H E F) (i j : B) (hCM : CM i j = 0) :
     ⁅F i, F j⁆ = 0 := by
   have hserre := h.ad_pow_lie_F_F i j
   rw [hCM, neg_zero, Int.toNat_zero, pow_zero] at hserre
   simpa using hserre
+
+/-- The degeneration for the presented algebra: when the Cartan-matrix entry vanishes, the
+raising generators commute. This is the normal-form version of
+`IsSerreSystem.lie_E_E_of_cartan_eq_zero`; the general statement cannot be a simp lemma
+because its parameters are not determined by the bracket. -/
+@[simp]
+theorem lie_serreE_serreE_of_cartan_eq_zero (i j : B) (hCM : CM i j = 0) :
+    ⁅serreE R CM i, serreE R CM j⁆ = 0 :=
+  IsSerreSystem.lie_E_E_of_cartan_eq_zero R CM (isSerreSystem_serre R CM) i j hCM
+
+/-- The degeneration for the presented algebra: when the Cartan-matrix entry vanishes, the
+lowering generators commute. This is the normal-form version of
+`IsSerreSystem.lie_F_F_of_cartan_eq_zero`; the general statement cannot be a simp lemma
+because its parameters are not determined by the bracket. -/
+@[simp]
+theorem lie_serreF_serreF_of_cartan_eq_zero (i j : B) (hCM : CM i j = 0) :
+    ⁅serreF R CM i, serreF R CM j⁆ = 0 :=
+  IsSerreSystem.lie_F_F_of_cartan_eq_zero R CM (isSerreSystem_serre R CM) i j hCM
 
 /-! ### Stability of Serre systems
 
