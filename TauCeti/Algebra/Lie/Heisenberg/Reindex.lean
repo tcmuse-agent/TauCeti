@@ -56,6 +56,7 @@ variable {n : Type*} [DecidableEq n] [Fintype n]
 
 /-- Heisenberg reindexing: the sum over k with k/(k!) coefficient reindexes to
     a sum over j=k-1 with 1/(j!) coefficient. The k=0 term vanishes. -/
+omit [CharZero R] in
 theorem heisenberg_reindex
     (N : ℕ) (u : R) (X C : Matrix n n R) :
     ∑ k ∈ Finset.range (N + 1),
