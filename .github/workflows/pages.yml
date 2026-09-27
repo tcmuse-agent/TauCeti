@@ -259,7 +259,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: TauCetiProject/TauCetiReview
-          ref: 692ebde95eea2a6d9d9f21954ba912c49f675d9d
+          ref: 95fa10ea655e8dacfcc84b8cd3f3e482e8c852ae
           path: .tauceti-review
           sparse-checkout: runner
           persist-credentials: false
@@ -1002,7 +1002,19 @@ jobs:
   # successful deploy repairs.
   advance-docgen-ref:
     needs: [build-site, deploy]
-    if: needs.build-site.outputs.docs-source-sha != '' && github.ref == 'refs/heads/main'
+    # `!cancelled()` is required rather than stylistic. A condition with no status function
+    # carries an implicit `success()`, and that check is not satisfied by this job's own needs
+    # succeeding: a skipped job anywhere above it skips it too. `deploy` needs `fallback-site`,
+    # which is skipped whenever the site builds, so without a status function here this job did
+    # not run at all.
+    #
+    # Dropping the implicit check drops it for both needs, so each is restored by name. `deploy`
+    # must have succeeded, or the branch would move onto documentation that was never published.
+    # `build-site` must have succeeded, so the published site is the one it produced rather than
+    # a fallback restore, and its SOURCE_SHA is the one read from the tree that was deployed.
+    if: ${{ !cancelled()
+        && needs.build-site.result == 'success' && needs.deploy.result == 'success'
+        && needs.build-site.outputs.docs-source-sha != '' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
